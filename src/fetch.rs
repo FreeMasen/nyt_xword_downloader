@@ -12,7 +12,7 @@ pub async fn execute(
     skip_sunday: bool,
     dest: impl AsRef<Path>,
 ) {
-    let today = time::OffsetDateTime::now_utc().date();
+    let today = date_utils::today().date();
     let start = start.unwrap_or(today);
     let end = end.unwrap_or(today).next_day().expect("the future");
     if !dest.as_ref().exists() {

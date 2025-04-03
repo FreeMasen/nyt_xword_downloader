@@ -1,4 +1,5 @@
-use time::{Date, Duration, Month, OffsetDateTime, Weekday};
+use time::{Date, Month, OffsetDateTime, Weekday};
+use time_tz::OffsetDateTimeExt;
 
 pub struct DateIter {
     pub next: Option<Date>,
@@ -8,7 +9,7 @@ pub struct DateIter {
 
 pub fn today() -> OffsetDateTime {
     OffsetDateTime::now_utc()
-        .to_offset(get_current_ny_offset())
+        .to_timezone(time_tz::timezones::db::EST5EDT)
         .replace_hour(12)
         .unwrap()
 }
@@ -83,58 +84,6 @@ pub fn parse_date(v: &str) -> Result<Date, Box<dyn std::error::Error + Send + Sy
         .into());
     }
     Ok(dt)
-}
-
-fn get_current_ny_offset() -> time::UtcOffset {
-    let now = OffsetDateTime::now_utc();
-
-    let hours = match now.month() {
-        Month::March => march_offset(now),
-        Month::November => november_offset(now),
-
-        Month::December => -5,
-        Month::January => -5,
-        Month::February => -5,
-
-        Month::April => -4,
-        Month::May => -4,
-        Month::June => -4,
-        Month::July => -4,
-        Month::August => -4,
-        Month::September => -4,
-        Month::October => -4,
-    };
-    time::UtcOffset::from_hms(hours, 0, 0).unwrap()
-}
-
-fn march_offset(utc: OffsetDateTime) -> i8 {
-    let mut sat_count = 0;
-    let mut second = utc.replace_day(1).unwrap();
-    loop {
-        if second.weekday() == Weekday::Sunday {
-            sat_count += 1;
-            if sat_count >= 2 {
-                break;
-            }
-        }
-        second += Duration::days(1);
-    }
-    if utc > second {
-        -5
-    } else {
-        -4
-    }
-}
-fn november_offset(utc: OffsetDateTime) -> i8 {
-    let mut first_sunday = utc.replace_day(1).unwrap();
-    while first_sunday.weekday() != Weekday::Sunday {
-        first_sunday += Duration::days(1);
-    }
-    if utc < first_sunday {
-        -5
-    } else {
-        -4
-    }
 }
 
 #[cfg(test)]

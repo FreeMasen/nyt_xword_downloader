@@ -1,0 +1,7 @@
+/target
+/puzzles
+/token
+**/.DS_Store
+/.vscode
+/*.sh
+*.pdf

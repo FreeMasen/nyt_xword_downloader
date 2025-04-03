@@ -1,0 +1,14 @@
+[package]
+name = "nyt_xword_downloader"
+version = "0.1.0"
+edition = "2021"
+repository = "https://github.com/FreeMasen/nyt_xword_downloader"
+description = "A utility for bulk downloading the NYT X-Word PDFs"
+authors = ["Robert Masen <r.f.masen@gmail.com>"]
+
+[dependencies]
+clap = { version = "4.5.23", features = ["derive"] }
+reqwest = "0.12.9"
+rookie = "0.5.6"
+time = { version = "0.3.37", features = ["formatting", "macros", "parsing"] }
+tokio = { version = "1.42.0", features = ["full"] }

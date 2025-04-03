@@ -1,0 +1,13 @@
+{
+    "build": {
+        "path_prefix": "nyt_xword_downloader"
+    },
+    "styles": {
+        "theme": "hacker"
+    },
+    "components": {
+        "artifacts": {
+            "cargo_dist": true
+        }
+    }
+}

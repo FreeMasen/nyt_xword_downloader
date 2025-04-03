@@ -77,7 +77,11 @@ fn scan_cookies(mut cookies: impl Iterator<Item = Cookie>) -> Option<String> {
                 .map(|ts| {
                     let exp = OffsetDateTime::from_unix_timestamp(ts as _).unwrap();
                     if exp > OffsetDateTime::now_utc() {
-                        println!("token expires in {:?}", exp - OffsetDateTime::now_utc());
+                        let d = exp - OffsetDateTime::now_utc();
+                        println!(
+                            "token expires in {}",
+                            humantime::format_duration(d.try_into().unwrap())
+                        );
                         true
                     } else {
                         false

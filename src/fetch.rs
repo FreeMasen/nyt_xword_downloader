@@ -60,12 +60,19 @@ fn try_find_cookie() -> Option<String> {
             return Some(ret);
         }
     }
+    #[cfg(target_os = "macos")]
     if let Ok(cookies) = rookie::safari(None) {
         if let Some(ret) = scan_cookies(cookies.into_iter()) {
             return Some(ret);
         }
     }
-    eprintln!("failed to find NYT-S cookie in firefox, chrome, brave, or safari cookie stores");
+    #[cfg(target_os = "windows")]
+    if let Ok(cookies) = rookie::edge(None) {
+        if let Some(ret) = scan_cookies(cookies.into_iter()) {
+            return Some(ret)
+        }
+    }
+    eprintln!("failed to find NYT-S cookie in firefox, chrome, brave, safari or edge cookie stores");
     None
 }
 

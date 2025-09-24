@@ -82,7 +82,9 @@ fn scan_cookies(mut cookies: impl Iterator<Item = Cookie>) -> Option<String> {
             && co
                 .expires
                 .map(|ts| {
-                    let exp = OffsetDateTime::from_unix_timestamp(ts as _).unwrap();
+                    let exp = OffsetDateTime::from_unix_timestamp((ts / 1000) as _).unwrap_or_else(|e| {
+                        panic!("Error converting ts {ts} to date: {e}");
+                    });
                     if exp > OffsetDateTime::now_utc() {
                         let d = exp - OffsetDateTime::now_utc();
                         println!(
